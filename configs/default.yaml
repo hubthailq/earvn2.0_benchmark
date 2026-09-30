@@ -40,7 +40,7 @@ gender:
   # REQUIRED unless data/gender_labels.csv exists: there is deliberately no default, because a wrong
   # number silently corrupts every gender result. Script 01 stops until you set it, then prints the
   # folders around the boundary so you can check them.
-  male_count: null
+  male_count: 446
   male_label: M
   female_label: F
 

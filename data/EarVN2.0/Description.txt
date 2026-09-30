@@ -1,0 +1,4 @@
+EarVN2.0: A new large-scale ear images dataset  in the wild
+Ho Chi Minh City Open University
+Ho Chi Minh University of Banking
+e-mail: thailq@hub.edu.vn, vinh.th@ou.edu.vn
