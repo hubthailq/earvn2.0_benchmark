@@ -1,0 +1,46 @@
+2026-09-30 17:43:26,068 | INFO    | === 00_check_env === output root: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs
+2026-09-30 17:43:26,647 | INFO    |   torch        2.11.0+cu130
+2026-09-30 17:43:27,111 | INFO    |   torchvision  0.26.0+cu130
+2026-09-30 17:43:27,729 | INFO    |   timm         1.0.26
+2026-09-30 17:43:27,729 | INFO    |   numpy        2.4.4
+2026-09-30 17:43:27,729 | INFO    |   pandas       3.0.2
+2026-09-30 17:43:28,069 | INFO    |   sklearn      1.8.0
+2026-09-30 17:43:28,069 | INFO    |   scipy        1.17.1
+2026-09-30 17:43:28,069 | INFO    |   PIL          12.2.0
+2026-09-30 17:43:28,074 | INFO    |   imagehash    4.3.2
+2026-09-30 17:43:28,074 | INFO    |   yaml         6.0.3
+2026-09-30 17:43:28,074 | INFO    |   tqdm         4.67.3
+2026-09-30 17:43:28,192 | INFO    |   GPU: NVIDIA GeForce RTX 3080, 9.6 GB, bf16=True
+2026-09-30 17:43:28,194 | INFO    |   dataset: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/data/EarVN2.0/Images (713 sub-folders)
+2026-09-30 17:43:28,194 | INFO    |   free disk at /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs: 40 GB
+2026-09-30 17:43:47,977 | INFO    |   OK   vgg11          vgg11.tv_in1k                                 feat_dim=4096
+2026-09-30 17:43:59,622 | INFO    |   OK   vgg16          vgg16.tv_in1k                                 feat_dim=4096
+2026-09-30 17:44:03,741 | INFO    |   OK   resnet18       resnet18.tv_in1k                              feat_dim=512
+2026-09-30 17:44:08,628 | INFO    |   OK   resnet50       resnet50.tv_in1k                              feat_dim=2048
+2026-09-30 17:44:18,603 | INFO    |   OK   resnet101      resnet101.tv_in1k                             feat_dim=2048
+2026-09-30 17:44:22,534 | INFO    |   OK   densenet121    densenet121.tv_in1k                           feat_dim=1024
+2026-09-30 17:44:27,484 | INFO    |   OK   densenet169    densenet169.tv_in1k                           feat_dim=1664
+2026-09-30 17:44:27,883 | INFO    |   OK   regnety008     regnety_008.pycls_in1k                        feat_dim=768
+2026-09-30 17:44:32,342 | INFO    |   OK   regnety016     regnety_016.pycls_in1k                        feat_dim=888
+2026-09-30 17:44:32,673 | INFO    |   OK   mobilenetv2    mobilenetv2_100.ra_in1k                       feat_dim=1280
+2026-09-30 17:44:34,254 | INFO    |   OK   mobilenetv3s   mobilenetv3_small_100.lamb_in1k               feat_dim=1024
+2026-09-30 17:44:34,634 | INFO    |   OK   mobilenetv3l   mobilenetv3_large_100.ra_in1k                 feat_dim=1280
+2026-09-30 17:44:35,002 | INFO    |   OK   effnet_b0      efficientnet_b0.ra_in1k                       feat_dim=1280
+2026-09-30 17:44:35,415 | INFO    |   OK   effnet_b2      efficientnet_b2.ra_in1k                       feat_dim=1408
+2026-09-30 17:44:39,903 | INFO    |   OK   effnetv2_s     tf_efficientnetv2_s.in1k                      feat_dim=1280
+2026-09-30 17:44:42,736 | INFO    |   OK   convnext_n     convnext_nano.d1h_in1k                        feat_dim=640
+2026-09-30 17:44:46,271 | INFO    |   OK   convnext_t     convnext_tiny.fb_in1k                         feat_dim=768
+2026-09-30 17:44:54,517 | INFO    |   OK   convnext_s     convnext_small.fb_in1k                        feat_dim=768
+2026-09-30 17:44:55,172 | INFO    |   OK   vit_s16        vit_small_patch16_224.augreg_in21k_ft_in1k    feat_dim=384
+2026-09-30 17:45:05,665 | INFO    |   OK   vit_b16        vit_base_patch16_224.augreg_in21k_ft_in1k     feat_dim=768
+2026-09-30 17:45:06,236 | INFO    |   OK   deit_s         deit_small_patch16_224.fb_in1k                feat_dim=384
+2026-09-30 17:45:06,755 | INFO    |   OK   swin_t         swin_tiny_patch4_window7_224.ms_in1k          feat_dim=768
+2026-09-30 17:45:18,848 | INFO    |   OK   swin_s         swin_small_patch4_window7_224.ms_in1k         feat_dim=768
+2026-09-30 17:45:19,281 | INFO    |   OK   mobilevit_xs   mobilevit_xs.cvnets_in1k                      feat_dim=384
+2026-09-30 17:45:19,659 | INFO    |   OK   mobilevit_s    mobilevit_s.cvnets_in1k                       feat_dim=640
+2026-09-30 17:45:21,874 | INFO    |   OK   mobilevitv2    mobilevitv2_100.cvnets_in1k                   feat_dim=512
+2026-09-30 17:45:22,493 | INFO    |   OK   dinov2_s       vit_small_patch14_dinov2.lvd142m              feat_dim=384
+2026-09-30 17:45:23,432 | INFO    |   OK   dinov2_b       vit_base_patch14_dinov2.lvd142m               feat_dim=768
+2026-09-30 17:45:32,024 | INFO    |   OK   clip_b16       vit_base_patch16_clip_224.openai              feat_dim=768
+2026-09-30 17:45:40,415 | INFO    |   OK   clip_b32       vit_base_patch32_clip_224.openai              feat_dim=768
+2026-09-30 17:45:40,415 | INFO    | environment OK

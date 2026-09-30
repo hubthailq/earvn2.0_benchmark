@@ -1,0 +1,25 @@
+2026-09-30 17:45:42,188 | INFO    | === 01_scan_dataset === output root: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs
+2026-09-30 17:45:42,189 | INFO    | dataset folder (one sub-folder per subject): /root/ThaiLe/new_exprerient/earvn2.0_benchmark/data/EarVN2.0/Images
+2026-09-30 17:46:38,319 | INFO    | 713 subjects, 133409 images, 0 unreadable, 101 tiny (<8px)
+2026-09-30 17:46:38,337 | WARNING | Gender taken from FOLDER ORDER. Check the boundary below, then either keep gender.male_count or write data/gender_labels.csv:
+2026-09-30 17:46:38,337 | WARNING |    # 444  444.Wongsakon_Prom_Tatha_Kon  -> M
+2026-09-30 17:46:38,337 | WARNING |    # 445  445.Wutthi_Thon_Mi_Lin_Ta_Chinda  -> M
+2026-09-30 17:46:38,337 | WARNING |    # 446  446.Yong_Sin_Wong_Phanit_Non  -> M
+2026-09-30 17:46:38,337 | WARNING |    # 447             447.Amber  -> F
+2026-09-30 17:46:38,337 | WARNING |    # 448         448.Angela_Ba  -> F
+2026-09-30 17:46:38,337 | WARNING |    # 449            449.Cao_Ng  -> F
+2026-09-30 17:46:38,756 | INFO    | 
+# Thống kê EarVN2.0 (tự sinh)
+
+| Thông tin | Giá trị |
+| --- | --- |
+| Số subject | 713 ({'M': 446, 'F': 267}) |
+| Tổng số ảnh đọc được | 133409 (không đọc được: 0) |
+| Ảnh theo giới tính | {'M': 95281, 'F': 38128} |
+| Ảnh mỗi subject (min / trung vị / TB / max) | 90 / 173.0 / 187.1 / 772 |
+| Cạnh ngắn (min / trung vị / max, px) | 1.0 / 51.0 / 550.0 |
+| Tỉ lệ cao/rộng (p25 / trung vị / p75) | 1.34 / 1.633 / 2.0 |
+| Phân bố cạnh ngắn | {'[0,32)': 30956, '[32,64)': 53029, '[64,128)': 38739, '[128,100000)': 10685} |
+| Kích thước đề xuất cho E0 'không vuông' | 224 × 128 |
+2026-09-30 17:46:38,763 | INFO    | Set preprocess.nonsquare_hw to [224, 128] in configs/default.yaml before running E0.
+2026-09-30 17:46:38,763 | INFO    | Problems: 0 (see /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs/metadata/scan_problems.csv)

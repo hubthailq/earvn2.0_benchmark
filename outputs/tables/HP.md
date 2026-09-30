@@ -1,0 +1,29 @@
+## Siêu tham số huấn luyện (tự sinh từ configs/default.yaml)
+
+| Tham số | Giá trị |
+| --- | --- |
+| Khởi tạo | trọng số pretrained timm (tag trong configs/models.yaml) |
+| Tiền xử lý | letterbox, 224×224, đệm 'edge', nội suy bicubic, chuẩn hoá mean/std riêng từng mô hình |
+| Augmentation (train) | crop giữ tỉ lệ [0.8, 1.0], xoay ±15°, dịch ±0.1, color jitter [0.3, 0.3, 0.3], lật ngang = True |
+| Optimizer | AdamW (β = (0.9, 0.999), ε = 1e-08), weight decay 0.05 (không áp dụng cho bias/norm) |
+| Lịch learning rate | cosine, warm-up tuyến tính 2 epoch, LR cuối = 0 × LR |
+| Số epoch tối đa / early stopping | 100 / patience 15 (theo Top-1 hoặc balanced acc trên val) |
+| Batch size (train / eval) | 64 / 128 |
+| Loss | cross-entropy, label smoothing 0, trọng số lớp nghịch tần suất (gender) |
+| Gradient clipping | 1 |
+| Mixed precision | có (auto; train, val/test và trích đặc trưng dùng cùng một độ chính xác cho mọi mô hình) |
+| channels_last (chỉ đổi bố cục bộ nhớ) | VGG, ResNet, DenseNet, RegNet, MobileNet, EfficientNet, ConvNeXt |
+| Seed | [0, 1, 2] (seed chia dữ liệu và episode: 2026) |
+| Quét learning rate | [0.0003, 0.0001, 3e-05], 10 epoch, mô hình nhỏ nhất mỗi họ, chọn theo Top-1 val S1 |
+| Few-shot | 100 episode (prototype), 20 (logistic regression, C ∈ [0.01, 0.1, 1.0, 10.0]) |
+| Learning rate – VGG | 0.0001 (mặc định, chưa quét) |
+| Learning rate – ResNet | 0.0001 (mặc định, chưa quét) |
+| Learning rate – DenseNet | 0.0001 (mặc định, chưa quét) |
+| Learning rate – RegNet | 0.0001 (mặc định, chưa quét) |
+| Learning rate – MobileNet | 0.0001 (mặc định, chưa quét) |
+| Learning rate – EfficientNet | 0.0001 (mặc định, chưa quét) |
+| Learning rate – ConvNeXt | 0.0001 (mặc định, chưa quét) |
+| Learning rate – ViT / DeiT | 0.0001 (mặc định, chưa quét) |
+| Learning rate – Swin | 0.0001 (mặc định, chưa quét) |
+| Learning rate – MobileViT | 0.0001 (mặc định, chưa quét) |
+| Learning rate – Pretrain nền tảng | 0.0001 (mặc định, chưa quét) |

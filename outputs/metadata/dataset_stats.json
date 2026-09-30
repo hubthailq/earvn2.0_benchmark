@@ -1,0 +1,72 @@
+{
+  "n_subjects": 713,
+  "n_subjects_by_gender": {
+    "M": 446,
+    "F": 267
+  },
+  "n_images_ok": 133409,
+  "n_images_unreadable": 0,
+  "n_images_truncated": 0,
+  "n_images_by_gender": {
+    "M": 95281,
+    "F": 38128
+  },
+  "images_per_subject": {
+    "min": 90,
+    "median": 173.0,
+    "mean": 187.1,
+    "max": 772
+  },
+  "width": {
+    "min": 1.0,
+    "p5": 18.0,
+    "p25": 33.0,
+    "median": 51.0,
+    "p75": 81.0,
+    "p95": 148.0,
+    "max": 550.0,
+    "mean": 62.7
+  },
+  "height": {
+    "min": 1.0,
+    "p5": 32.0,
+    "p25": 56.0,
+    "median": 85.0,
+    "p75": 129.0,
+    "p95": 224.0,
+    "max": 674.0,
+    "mean": 100.5
+  },
+  "min_side": {
+    "min": 1.0,
+    "p5": 18.0,
+    "p25": 33.0,
+    "median": 51.0,
+    "p75": 80.0,
+    "p95": 145.0,
+    "max": 550.0,
+    "mean": 62.1
+  },
+  "aspect_hw": {
+    "min": 0.006,
+    "p5": 1.048,
+    "p25": 1.34,
+    "median": 1.633,
+    "p75": 2.0,
+    "p95": 2.729,
+    "max": 20.0,
+    "mean": 1.729
+  },
+  "n_tiny": 101,
+  "short_side_bins": {
+    "[0,32)": 30956,
+    "[32,64)": 53029,
+    "[64,128)": 38739,
+    "[128,100000)": 10685
+  },
+  "pre_split_layout": false,
+  "suggested_nonsquare_hw": [
+    224,
+    128
+  ]
+}

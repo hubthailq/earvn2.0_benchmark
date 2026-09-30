@@ -1,0 +1,5 @@
+2026-09-30 17:49:05,819 | INFO    | === 03_qc_labels === output root: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs
+2026-09-30 17:49:07,182 | INFO    | 1605 outliers (z < -3.0)
+2026-09-30 17:49:09,348 | INFO    | 19981 images to review -> /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs/qc/outliers_for_review.csv
+2026-09-30 17:49:09,348 | INFO    | Fill column 'remove' with y for images to drop, then run: python scripts/03_qc_labels.py --apply
+2026-09-30 17:49:09,349 | WARNING | Gender comes from folder order: last 'M' = 446.Yong_Sin_Wong_Phanit_Non, first 'F' = 447.Amber. Check ~10 folders around it.

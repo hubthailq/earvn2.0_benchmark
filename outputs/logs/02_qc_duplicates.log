@@ -1,0 +1,15 @@
+2026-09-30 17:46:40,319 | INFO    | === 02_qc_duplicates === output root: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs
+2026-09-30 17:46:40,509 | INFO    | 133409 usable images
+2026-09-30 17:47:07,183 | INFO    | 5 byte-identical copies (same md5): always counted as duplicates
+2026-09-30 17:47:55,500 | INFO    | pHash: 64280 near-duplicate pairs (Hamming <= 6; 6786 ignored because an image is < 24px)
+2026-09-30 17:49:03,363 | INFO    | DINOv2: 1357 same-subject pairs with cosine >= 0.95
+2026-09-30 17:49:03,557 | INFO    | threshold review phash: 50 borderline pairs -> qc/threshold_review_phash.jpg / .csv
+2026-09-30 17:49:03,655 | INFO    | threshold review dino: 50 borderline pairs -> qc/threshold_review_dino.jpg / .csv
+2026-09-30 17:49:03,977 | WARNING | 2 near-duplicate groups hold > 20% of their subject (e.g. subject 099.Bach_Vu: 65/225 images). Thresholds are probably too loose: inspect near_duplicate_pairs.csv and lower qc.phash_hamming_max / raise qc.dino_cosine_min or use qc.pair_rule=and.
+2026-09-30 17:49:03,978 | INFO    | 
+## Q1 – Ảnh gần trùng
+
+- Số cặp gần trùng: 65135 (khác người: 57945)
+- Số nhóm gần trùng (≥ 2 ảnh): 3476, gồm 9029 ảnh; nhóm lớn nhất: 65 ảnh
+- Dataset chưa có split sẵn → S1 sẽ được tạo mới theo nhóm (script 04)
+2026-09-30 17:49:03,978 | WARNING | 57945 near-duplicate pairs between DIFFERENT subjects: likely label errors, reviewed in script 03

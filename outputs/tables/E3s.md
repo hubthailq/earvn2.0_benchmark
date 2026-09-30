@@ -1,0 +1,34 @@
+## E3 – Identity, few-shot (Top-1 trung bình theo người %, trung bình ± CI95)
+
+| Họ | Mô hình | Proto 1-shot | Proto 2-shot | Proto 5-shot | LP 1-shot | LP 2-shot | LP 5-shot |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| VGG | VGG-11 | – | – | – | – | – | – |
+| VGG | VGG-16 | – | – | – | – | – | – |
+| ResNet | ResNet-18 | – | – | – | – | – | – |
+| ResNet | ResNet-50 | – | – | – | – | – | – |
+| ResNet | ResNet-101 | – | – | – | – | – | – |
+| DenseNet | DenseNet-121 | – | – | – | – | – | – |
+| DenseNet | DenseNet-169 | – | – | – | – | – | – |
+| RegNet | RegNetY-800MF | – | – | – | – | – | – |
+| RegNet | RegNetY-1.6GF | – | – | – | – | – | – |
+| MobileNet | MobileNetV2 | – | – | – | – | – | – |
+| MobileNet | MobileNetV3-S | – | – | – | – | – | – |
+| MobileNet | MobileNetV3-L | – | – | – | – | – | – |
+| EfficientNet | EfficientNet-B0 | – | – | – | – | – | – |
+| EfficientNet | EfficientNet-B2 | – | – | – | – | – | – |
+| EfficientNet | EfficientNetV2-S | – | – | – | – | – | – |
+| ConvNeXt | ConvNeXt-N | – | – | – | – | – | – |
+| ConvNeXt | ConvNeXt-T | – | – | – | – | – | – |
+| ConvNeXt | ConvNeXt-S | – | – | – | – | – | – |
+| ViT / DeiT | ViT-S/16 | – | – | – | – | – | – |
+| ViT / DeiT | ViT-B/16 | – | – | – | – | – | – |
+| ViT / DeiT | DeiT-S | – | – | – | – | – | – |
+| Swin | Swin-T | – | – | – | – | – | – |
+| Swin | Swin-S | – | – | – | – | – | – |
+| MobileViT | MobileViT-XS | – | – | – | – | – | – |
+| MobileViT | MobileViT-S | – | – | – | – | – | – |
+| MobileViT | MobileViTv2-1.0 | – | – | – | – | – | – |
+| Pretrain nền tảng | DINOv2 ViT-S/14 | – | – | – | – | – | – |
+| Pretrain nền tảng | DINOv2 ViT-B/14 | – | – | – | – | – | – |
+| Pretrain nền tảng | CLIP ViT-B/16 | – | – | – | – | – | – |
+| Pretrain nền tảng | CLIP ViT-B/32 | – | – | – | – | – | – |

@@ -1,0 +1,3 @@
+2026-09-30 17:49:10,837 | INFO    | === 16_make_tables === output root: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs
+2026-09-30 17:49:10,907 | INFO    | tables written to /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs/tables (combined: /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs/tables/all_tables.md)
+2026-09-30 17:49:10,913 | INFO    | final results: 0 CSV files in /root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs/results (column meanings: README.md there)

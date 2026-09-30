@@ -1,0 +1,222 @@
+{
+  "seed": 2026,
+  "device": "auto",
+  "num_workers": 4,
+  "pretrained": true,
+  "gpu_fallback": {
+    "mode": "cpu",
+    "min_micro_batch": 4,
+    "min_free_mb_to_return": 4096,
+    "check_every_s": 60,
+    "max_wait_minutes": 360
+  },
+  "paths": {
+    "dataset_root": "/root/ThaiLe/new_exprerient/earvn2.0_benchmark/data/EarVN2.0/Images",
+    "gender_labels": "/root/ThaiLe/new_exprerient/earvn2.0_benchmark/data/gender_labels.csv",
+    "earvn1_root": "/root/ThaiLe/new_exprerient/earvn2.0_benchmark/data/EarVN1.0",
+    "awe_root": "/root/ThaiLe/new_exprerient/earvn2.0_benchmark/data/AWE",
+    "output_root": "/root/ThaiLe/new_exprerient/earvn2.0_benchmark/outputs"
+  },
+  "dataset": {
+    "image_extensions": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".bmp",
+      ".webp",
+      ".tif",
+      ".tiff"
+    ],
+    "split_folder_aliases": {
+      "train": [
+        "train",
+        "training"
+      ],
+      "val": [
+        "val",
+        "valid",
+        "validation"
+      ],
+      "test": [
+        "test",
+        "testing"
+      ]
+    },
+    "min_side_warn": 8,
+    "keep_truncated": false
+  },
+  "gender": {
+    "male_count": 446,
+    "male_label": "M",
+    "female_label": "F"
+  },
+  "qc": {
+    "phash_hamming_max": 6,
+    "phash_min_side": 24,
+    "dino_model": "vit_small_patch14_dinov2.lvd142m",
+    "dino_cosine_min": 0.95,
+    "pair_rule": "or",
+    "max_group_fraction": 0.2,
+    "review_pairs": 50,
+    "review_margin": 0.05,
+    "outlier_z": -3.0,
+    "leakage_threshold": 0.01,
+    "earvn1_min_matches": 3,
+    "batch_size": 64
+  },
+  "splits": {
+    "s1": {
+      "train": 45,
+      "val": 15,
+      "min_images": 90
+    },
+    "s2": {
+      "n_folds": 5
+    },
+    "s3": {
+      "novel_fraction": 0.3
+    }
+  },
+  "preprocess": {
+    "size": 224,
+    "mode": "letterbox",
+    "nonsquare_hw": [
+      224,
+      128
+    ],
+    "pad": "edge",
+    "interpolation": "bicubic",
+    "augment": {
+      "rotate_deg": 15,
+      "translate": 0.1,
+      "scale": [
+        0.8,
+        1.0
+      ],
+      "color_jitter": [
+        0.3,
+        0.3,
+        0.3
+      ],
+      "hflip": true
+    }
+  },
+  "train": {
+    "epochs": 100,
+    "batch_size": 64,
+    "eval_batch_size": 128,
+    "patience": 15,
+    "optimizer": {
+      "name": "adamw",
+      "weight_decay": 0.05,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "momentum": 0.9,
+      "nesterov": false,
+      "no_decay_bias_norm": true
+    },
+    "scheduler": {
+      "name": "cosine",
+      "warmup_epochs": 2,
+      "min_lr_ratio": 0.0,
+      "step_epochs": [
+        60,
+        80
+      ],
+      "step_gamma": 0.1
+    },
+    "learning_rate": {
+      "by_family": {},
+      "default": 0.0001,
+      "sweep_grid": [
+        0.0003,
+        0.0001,
+        3e-05
+      ],
+      "sweep_epochs": 10
+    },
+    "label_smoothing": 0.0,
+    "grad_clip": 1.0,
+    "gender_balanced_loss": true,
+    "amp": true,
+    "amp_dtype": "auto",
+    "deterministic": false,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "save_checkpoint": false,
+    "channels_last_families": [
+      "VGG",
+      "ResNet",
+      "DenseNet",
+      "RegNet",
+      "MobileNet",
+      "EfficientNet",
+      "ConvNeXt"
+    ],
+    "memory_plan": {
+      "use": true,
+      "budget_fraction": 0.85,
+      "probe_steps": 3,
+      "timed_steps": 5
+    }
+  },
+  "fewshot": {
+    "identity_shots": [
+      1,
+      2,
+      5
+    ],
+    "identity_val": 5,
+    "gender_shots": [
+      1,
+      2,
+      5,
+      10
+    ],
+    "episodes_prototype": 100,
+    "episodes_linear": 20,
+    "linear_C_grid": [
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "linear_max_iter": 1000,
+    "gender_val_max_images": 2000,
+    "gender_linear_shots": [
+      5,
+      10
+    ],
+    "single_gallery_runs": 100
+  },
+  "unsupervised": {
+    "kmeans_restarts": 3,
+    "kmeans_max_iter": 300,
+    "minibatch_above": 200000,
+    "minibatch_size": 4096,
+    "minibatch_n_init": 3
+  },
+  "retrieval": {
+    "gallery_shots": [
+      1,
+      5
+    ],
+    "runs": 10,
+    "max_impostor_pairs": 1000000,
+    "far": 0.01
+  },
+  "resolution_bins": [
+    0,
+    32,
+    64,
+    128,
+    100000
+  ],
+  "feature_batch_size": 128
+}

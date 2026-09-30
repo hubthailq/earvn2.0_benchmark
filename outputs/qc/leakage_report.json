@@ -1,0 +1,13 @@
+{
+  "n_images": 133409,
+  "n_pairs": 65135,
+  "n_groups_size_gt1": 3476,
+  "n_images_in_groups_size_gt1": 9029,
+  "largest_group": 65,
+  "n_cross_subject_pairs": 57945,
+  "threshold": 0.01,
+  "pair_rule": "or",
+  "n_oversized_groups": 2,
+  "decision_s1": "resplit",
+  "note": "dataset has no train/val/test folders: S1 will be created by script 04"
+}
