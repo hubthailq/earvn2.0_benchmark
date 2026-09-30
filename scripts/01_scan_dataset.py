@@ -29,6 +29,7 @@ def extra(p):
 
 def main():
     args, cfg, paths, log = setup(__doc__, extra)
+    log.info(f"dataset folder (one sub-folder per subject): {cfg.paths.dataset_root}")
     images, subjects, problems = scan_dataset(cfg, log, workers=args.workers)
     subj = assign_gender(cfg, subjects, log)
     counts = images[images.status == "ok"].groupby("subject").size()

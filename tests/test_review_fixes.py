@@ -385,3 +385,31 @@ def test_s3_features_must_come_from_the_current_checkpoint(tmp_path):
     assert not s3_features_are_current(f, paths, "resnet18")
     ck.unlink()                                                # retraining diverged: no checkpoint
     assert not s3_features_are_current(f, paths, "resnet18")
+
+
+def test_released_layout_with_images_subfolder(tmp_path, cfg_factory):
+    """EarVN2.0/{Description.txt, Images/001.ALI_HD/001 (1).jpg, ...}: the Images level is found by itself."""
+    root = tmp_path / "EarVN2.0"
+    (root / "Images").mkdir(parents=True)
+    (root / "Description.txt").write_text("EarVN2.0")
+    names = ["001.ALI_HD", "002.LeDuong_BL", "010.Chu_B", "099.Xx", "100.Yy"]
+    rng = np.random.default_rng(0)
+    for n in names:
+        (root / "Images" / n).mkdir()
+        for i in (1, 2, 10):
+            Image.fromarray(rng.integers(0, 255, (40, 30, 3), dtype=np.uint8)).save(root / "Images" / n / f"{n[:3]} ({i}).jpg")
+    cfg = cfg_factory(root, tmp_path / "out")
+    assert cfg.paths.dataset_root.endswith("Images")
+    images, subjects, problems = scan_dataset(cfg, workers=2)
+    assert subjects == names and len(images) == 15 and set(images.status) == {"ok"} and problems.empty
+    assert images.image_id.iloc[0] == "001.ALI_HD/001 (1).jpg" and set(images.orig_split) == {""}
+    from earbench.scan import assign_gender
+    g = assign_gender(cfg, subjects).set_index("subject").gender           # cfg_factory: male_count=4
+    assert list(g) == ["M", "M", "M", "M", "F"]
+    # a single subject that has train/val/test folders is NOT mistaken for the Images level
+    one = tmp_path / "one"
+    for sp in ("train", "val", "test"):
+        (one / "001" / sp).mkdir(parents=True)
+    from earbench.config import descend_single_folder
+    assert descend_single_folder(str(one)) == str(one)
+    assert descend_single_folder(str(root / "Images")) == str(root / "Images")

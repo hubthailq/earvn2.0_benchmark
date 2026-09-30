@@ -4,18 +4,29 @@
 
 ```
 data/
-├── EarVN2.0/                  <- BẮT BUỘC: mỗi thư mục con là 1 subject
-│   ├── 001/
-│   │   ├── train/  val/  test/   (nếu đã có split của script cũ; tên không phân biệt hoa thường,
-│   │   │                          chấp nhận cả valid/validation, training, testing)
-│   │   └── ... hoặc để ảnh trực tiếp trong 001/ (chưa chia)
-│   ├── 002/
-│   └── ...
-├── gender_labels.csv          <- NÊN CÓ: nhãn giới tính tường minh (xem gender_labels.example.csv)
+├── EarVN2.0/                  <- BẮT BUỘC: chép nguyên bộ dữ liệu vào đây, giữ nguyên cấu trúc
+│   ├── Description.txt
+│   └── Images/                <- code tự nhận ra lớp này (không cần sửa đường dẫn)
+│       ├── 001.ALI_HD/
+│       │   ├── 001 (1).jpg
+│       │   ├── 001 (2).jpg
+│       │   └── ...            (ảnh để trực tiếp, CHƯA chia train/val/test: script 04 tự chia 45/15/còn lại)
+│       ├── 002.LeDuong_BL/
+│       └── ...
+├── gender_labels.csv          <- tuỳ chọn: nhãn giới tính từng người (xem gender_labels.example.csv)
 ├── EarVN1.0/                  <- tuỳ chọn, cho Q3 (kiểm tra trùng người) và E8
 │   ├── 1/ 2/ ...              (mỗi thư mục = 1 người)
 └── AWE/                       <- tuỳ chọn, cho E8 (mỗi thư mục = 1 người)
 ```
+
+Cũng chấp nhận: các thư mục người nằm ngay trong `EarVN2.0/` (không có lớp `Images/`), hoặc mỗi thư mục
+người có sẵn `train/ val/ test/` (tên không phân biệt hoa thường, chấp nhận valid/validation, training, testing).
+Nếu `EarVN2.0/` chỉ chứa đúng một thư mục con (như `Images/`) và trong đó có nhiều thư mục, code tự dùng thư mục
+con đó; script 01 in ra đường dẫn thực sự được dùng.
+
+**Mã người (subject)** = đúng tên thư mục, ví dụ `001.ALI_HD`. Thứ tự người theo **số đứng đầu** tên thư mục
+(001, 002, …, 010, …, 100), nên `gender.male_count: 300` nghĩa là các thư mục `001.…` đến `300.…` là nam. Nếu
+dùng `gender_labels.csv` thì cột `subject` phải ghi đúng tên thư mục đầy đủ.
 
 ## Quy ước
 

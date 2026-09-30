@@ -40,7 +40,7 @@ Bốn việc dưới đây **code không tự làm thay được**; làm sai th�
    `outputs/metadata/dataset_stats.md` và đặt vào `preprocess.nonsquare_hw`.
 
 Những gì **đã** được kiểm thử: toàn bộ logic (đọc ảnh, QC, chia dữ liệu, huấn luyện, few-shot, phân cụm,
-đo lường, sinh bảng, chuyển GPU ↔ CPU) trên dữ liệu giả với 169 test. Những gì **chưa** kiểm được và cần để ý ở lần chạy thật đầu
+đo lường, sinh bảng, chuyển GPU ↔ CPU) trên dữ liệu giả với 170 test. Những gì **chưa** kiểm được và cần để ý ở lần chạy thật đầu
 tiên: ngưỡng QC trên ảnh thật (mục 2), LR tìm được có hội tụ tốt với trọng số pretrained thật không (xem
 `outputs/runs/lr_sweep/*/log.csv`), và thời gian chạy thực tế so với ước tính ở mục 9, và cơ chế chuyển GPU ↔ CPU (mục 8) trên GPU thật —
 cơ chế này được kiểm thử bằng lỗi hết bộ nhớ giả lập vì máy phát triển không có GPU.
@@ -72,7 +72,7 @@ earvn2-benchmark/
 │   └── tables.py      (sinh bảng Markdown + LaTeX)
 ├── scripts/                  <- 17 script, chạy theo thứ tự số
 ├── tools/make_synthetic_dataset.py   <- tạo dataset giả để chạy thử
-├── tests/                    <- 169 test (đơn vị + chạy toàn bộ pipeline)
+├── tests/                    <- 170 test (đơn vị + chạy toàn bộ pipeline)
 └── outputs/                  <- (tự sinh) mọi kết quả, không bao giờ ghi vào data/
 ```
 
@@ -100,10 +100,13 @@ internet: tải trên máy khác, chép thư mục cache sang, rồi đặt `HF_
 
 ## 3. Đặt dữ liệu
 
+Chép nguyên bộ dữ liệu vào `data/EarVN2.0/`, giữ nguyên cấu trúc phát hành:
 ```
-data/EarVN2.0/001/*.jpg      (chưa chia)        hoặc
-data/EarVN2.0/001/train|val|test/*.jpg          (đã chia bằng script cũ 45/15/còn lại)
+data/EarVN2.0/Description.txt
+data/EarVN2.0/Images/001.ALI_HD/001 (1).jpg ...   <- code tự nhận lớp Images/; ảnh chưa chia, script 04 chia
 ```
+(Cũng chấp nhận `data/EarVN2.0/001/*.jpg` hoặc `data/EarVN2.0/001/train|val|test/*.jpg`.) Mã người = tên thư mục
+(`001.ALI_HD`); thứ tự theo số đứng đầu tên.
 
 Chi tiết và quy ước: `data/README.md`. **Nên** tạo `data/gender_labels.csv` (cột `subject,gender`, giá trị
 `M`/`F`); nếu không có, giới tính lấy theo thứ tự thư mục với `gender.male_count` thư mục đầu là nam.
@@ -361,7 +364,7 @@ Dữ liệu giả cố tình chứa file hỏng, file rỗng, ảnh xám/RGBA/CM
 
 ```bash
 pip install -r requirements-dev.txt
-pytest -m "not slow"      # ~1 phút: 167 test đơn vị (split, metric, tiền xử lý, QC, đọc ảnh, GPU→CPU, công bằng giữa mô hình...)
+pytest -m "not slow"      # ~1 phút: 168 test đơn vị (split, metric, tiền xử lý, QC, đọc ảnh, GPU→CPU, công bằng giữa mô hình...)
 pytest -m slow            # ~5 phút CPU: chạy TOÀN BỘ 17 script trên 2 dataset giả (có/không split sẵn,
                           # có rò rỉ, có trùng với EarVN1.0), kiểm tra kết quả và khả năng chạy tiếp
 ```

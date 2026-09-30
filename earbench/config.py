@@ -105,7 +105,28 @@ def load_config(path: str | os.PathLike | None = None, overrides: list[str] | No
     for k, v in list(cfg.paths.items()):
         if v is not None and not os.path.isabs(str(v)):
             cfg.paths[k] = str((PROJECT_ROOT / v).resolve())
+    for k in ("dataset_root", "earvn1_root", "awe_root"):
+        if cfg.paths.get(k):
+            cfg.paths[k] = descend_single_folder(cfg.paths[k])
     return cfg
+
+
+def descend_single_folder(root: str) -> str:
+    """A released dataset often looks like EarVN2.0/{Description.txt, Images/<subject folders>}. If the
+    folder holds exactly ONE sub-folder (plus files) and that sub-folder holds several folders, the subject
+    folders are one level down: use it, so the dataset can be copied into data/ exactly as it is."""
+    r = Path(root)
+    if not r.is_dir():
+        return root
+    hidden = lambda n: n.startswith(".") or n.startswith("__MACOSX")  # noqa: E731
+    dirs = [d for d in r.iterdir() if d.is_dir() and not hidden(d.name)]
+    if len(dirs) != 1:
+        return root
+    inner = [d for d in dirs[0].iterdir() if d.is_dir() and not hidden(d.name)]
+    splits = {"train", "training", "val", "valid", "validation", "test", "testing"}
+    if len(inner) < 2 or all(d.name.lower() in splits for d in inner):   # one subject with split folders
+        return root
+    return str(dirs[0])
 
 
 def add_common_args(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
