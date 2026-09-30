@@ -1,0 +1,42 @@
+# =============================================================================
+# The 30 benchmark models (11 families).  Order here = order of rows in every table.
+#   key          : short id used in file names and CLI (--models resnet18,vit_s16)
+#   name         : display name in tables
+#   family       : family used for the learning-rate sweep and table grouping
+#   timm         : exact timm model + pretrained tag (pinned for reproducibility)
+#   square_only  : true -> cannot take a non-square input (skipped in E0 'nonsquare')
+#   kwargs       : extra arguments for timm.create_model
+#   basic        : one of the 5 "basic" models run first (E0 and the first E1/E2 pass)
+#   lr_rep       : the family representative used in the LR sweep (smallest model)
+# =============================================================================
+models:
+  - {key: vgg11,        name: VGG-11,            family: VGG,          timm: vgg11.tv_in1k,                          square_only: false, lr_rep: true}
+  - {key: vgg16,        name: VGG-16,            family: VGG,          timm: vgg16.tv_in1k,                          square_only: false}
+  - {key: resnet18,     name: ResNet-18,         family: ResNet,       timm: resnet18.tv_in1k,                       square_only: false, basic: true, lr_rep: true}
+  - {key: resnet50,     name: ResNet-50,         family: ResNet,       timm: resnet50.tv_in1k,                       square_only: false, basic: true}
+  - {key: resnet101,    name: ResNet-101,        family: ResNet,       timm: resnet101.tv_in1k,                      square_only: false}
+  - {key: densenet121,  name: DenseNet-121,      family: DenseNet,     timm: densenet121.tv_in1k,                    square_only: false, lr_rep: true}
+  - {key: densenet169,  name: DenseNet-169,      family: DenseNet,     timm: densenet169.tv_in1k,                    square_only: false}
+  - {key: regnety008,   name: RegNetY-800MF,     family: RegNet,       timm: regnety_008.pycls_in1k,                 square_only: false, lr_rep: true}
+  - {key: regnety016,   name: RegNetY-1.6GF,     family: RegNet,       timm: regnety_016.pycls_in1k,                 square_only: false}
+  - {key: mobilenetv2,  name: MobileNetV2,       family: MobileNet,    timm: mobilenetv2_100.ra_in1k,                square_only: false, basic: true}
+  - {key: mobilenetv3s, name: MobileNetV3-S,     family: MobileNet,    timm: mobilenetv3_small_100.lamb_in1k,        square_only: false, lr_rep: true}
+  - {key: mobilenetv3l, name: MobileNetV3-L,     family: MobileNet,    timm: mobilenetv3_large_100.ra_in1k,          square_only: false}
+  - {key: effnet_b0,    name: EfficientNet-B0,   family: EfficientNet, timm: efficientnet_b0.ra_in1k,                square_only: false, basic: true, lr_rep: true}
+  - {key: effnet_b2,    name: EfficientNet-B2,   family: EfficientNet, timm: efficientnet_b2.ra_in1k,                square_only: false}
+  - {key: effnetv2_s,   name: EfficientNetV2-S,  family: EfficientNet, timm: tf_efficientnetv2_s.in1k,               square_only: false}
+  - {key: convnext_n,   name: ConvNeXt-N,        family: ConvNeXt,     timm: convnext_nano.d1h_in1k,                 square_only: false, lr_rep: true}
+  - {key: convnext_t,   name: ConvNeXt-T,        family: ConvNeXt,     timm: convnext_tiny.fb_in1k,                  square_only: false}
+  - {key: convnext_s,   name: ConvNeXt-S,        family: ConvNeXt,     timm: convnext_small.fb_in1k,                 square_only: false}
+  - {key: vit_s16,      name: ViT-S/16,          family: ViT / DeiT,   timm: vit_small_patch16_224.augreg_in21k_ft_in1k, square_only: true, basic: true, lr_rep: true}
+  - {key: vit_b16,      name: ViT-B/16,          family: ViT / DeiT,   timm: vit_base_patch16_224.augreg_in21k_ft_in1k,  square_only: true}
+  - {key: deit_s,       name: DeiT-S,            family: ViT / DeiT,   timm: deit_small_patch16_224.fb_in1k,         square_only: true}
+  - {key: swin_t,       name: Swin-T,            family: Swin,         timm: swin_tiny_patch4_window7_224.ms_in1k,   square_only: true, lr_rep: true}
+  - {key: swin_s,       name: Swin-S,            family: Swin,         timm: swin_small_patch4_window7_224.ms_in1k,  square_only: true}
+  - {key: mobilevit_xs, name: MobileViT-XS,      family: MobileViT,    timm: mobilevit_xs.cvnets_in1k,               square_only: false, lr_rep: true}
+  - {key: mobilevit_s,  name: MobileViT-S,       family: MobileViT,    timm: mobilevit_s.cvnets_in1k,                square_only: false}
+  - {key: mobilevitv2,  name: MobileViTv2-1.0,   family: MobileViT,    timm: mobilevitv2_100.cvnets_in1k,            square_only: false}
+  - {key: dinov2_s,     name: DINOv2 ViT-S/14,   family: Pretrain nền tảng, timm: vit_small_patch14_dinov2.lvd142m,  square_only: true, lr_rep: true, kwargs: {img_size: 224}}
+  - {key: dinov2_b,     name: DINOv2 ViT-B/14,   family: Pretrain nền tảng, timm: vit_base_patch14_dinov2.lvd142m,   square_only: true, kwargs: {img_size: 224}}
+  - {key: clip_b16,     name: CLIP ViT-B/16,     family: Pretrain nền tảng, timm: vit_base_patch16_clip_224.openai,  square_only: true}
+  - {key: clip_b32,     name: CLIP ViT-B/32,     family: Pretrain nền tảng, timm: vit_base_patch32_clip_224.openai,  square_only: true}

@@ -1,0 +1,169 @@
+# =============================================================================
+# EarVN2.0 benchmark - default configuration
+# Every value can be overridden from the command line:
+#   python scripts/08_train_supervised.py --set train.batch_size=32 --set device=cpu
+# =============================================================================
+
+seed: 2026            # master seed (splits, episodes, clustering); per-run seeds are listed below
+device: auto          # auto | cuda | cpu
+num_workers: 4        # DataLoader workers (set 0 on Windows if you see errors)
+pretrained: true      # load ImageNet/pretrained weights (false only for offline smoke tests)
+
+gpu_fallback:         # what to do when the GPU runs out of memory (so a long run never crashes)
+  mode: cpu                    # cpu: continue on the CPU, return to the GPU later | wait: pause until the GPU is free | off: crash
+  min_micro_batch: 4           # first split the batch into micro-batches (same gradient) down to this size
+  min_free_mb_to_return: 4096  # go back to the GPU when at least this much GPU memory is free
+  check_every_s: 60            # how often to check free GPU memory while on the CPU
+  max_wait_minutes: 360        # mode=wait: give up after this long
+
+paths:
+  dataset_root: data/EarVN2.0        # one sub-folder per subject (see data/README.md)
+  gender_labels: data/gender_labels.csv   # optional; if missing, gender is derived from folder order (see gender:)
+  earvn1_root: data/EarVN1.0         # optional, only for Q3 / E8
+  awe_root: data/AWE                 # optional, only for E8
+  output_root: outputs               # everything generated goes here
+
+dataset:
+  image_extensions: [".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tif", ".tiff"]
+  # names of pre-split sub-folders inside a subject folder (case-insensitive)
+  split_folder_aliases:
+    train: ["train", "training"]
+    val: ["val", "valid", "validation"]
+    test: ["test", "testing"]
+  min_side_warn: 8     # images with min(width, height) below this are flagged (kept)
+  keep_truncated: false  # files that end early (bytes missing, bottom of the image grey) are excluded;
+                         # true = keep them (they are still listed in metadata/scan_problems.csv)
+
+gender:
+  # Used only when paths.gender_labels does not exist.
+  # Subjects are sorted in natural order (1, 2, ..., 10) and the first `male_count` are male.
+  # REQUIRED unless data/gender_labels.csv exists: there is deliberately no default, because a wrong
+  # number silently corrupts every gender result. Script 01 stops until you set it, then prints the
+  # folders around the boundary so you can check them.
+  male_count: null
+  male_label: M
+  female_label: F
+
+qc:
+  phash_hamming_max: 6          # pHash distance <= this -> near-duplicate
+  phash_min_side: 24            # pHash is unreliable on tiny images: ignore pHash matches if either image is smaller
+  dino_model: vit_small_patch14_dinov2.lvd142m
+  dino_cosine_min: 0.95         # same-subject cosine >= this -> near-duplicate
+  pair_rule: or                 # or: pHash OR DINOv2 match | and: both must match (stricter) | phash | dino
+  max_group_fraction: 0.2       # warn if one near-duplicate group holds more than this share of a subject
+  review_pairs: 50              # borderline pairs shown in qc/threshold_review_{dino,phash}.jpg for a visual check
+  review_margin: 0.05           # DINOv2 pairs with cosine in [threshold - margin, threshold) are shown as "not duplicate"
+  outlier_z: -3.0               # images with z-score below this are flagged for manual review
+  leakage_threshold: 0.01       # >1% of S1 test images with a near-duplicate in train -> re-split S1
+  earvn1_min_matches: 3         # EarVN2.0 subject needs >= this many matched images to be flagged as overlapping
+  batch_size: 64
+
+splits:
+  s1: {train: 45, val: 15, min_images: 90}    # identity: fixed per subject, rest = test
+  s2: {n_folds: 5}                            # gender: subject-disjoint, stratified by gender
+  s3: {novel_fraction: 0.3}                   # E7: fraction of subjects held out as "new people"
+
+preprocess:
+  size: 224                     # final square side
+  mode: letterbox               # letterbox | stretch | nonsquare
+  nonsquare_hw: [224, 128]      # used when mode = nonsquare (CNN only); set from script 01 statistics
+  pad: edge                     # edge (replicate border pixels) | mean (ImageNet mean colour)
+  interpolation: bicubic
+  augment:
+    rotate_deg: 15
+    translate: 0.10
+    scale: [0.8, 1.0]            # random resized crop area (aspect ratio kept)
+    color_jitter: [0.3, 0.3, 0.3] # brightness, contrast, saturation
+    hflip: true
+
+# -----------------------------------------------------------------------------
+# Fine-tuning recipe (E0, E1, E2, LR sweep, S3). The SAME recipe is used for all 30 models; only the
+# learning rate differs per family (see learning_rate below). Every run also saves the exact values it
+# used in outputs/runs/<exp>/<model>/<run>/hparams.json, and scripts/16 writes tables/hyperparameters.md.
+# -----------------------------------------------------------------------------
+train:
+  epochs: 100                   # maximum number of epochs (early stopping usually ends sooner);
+                                # the cosine schedule is laid out over all of them
+  batch_size: 64                # images per optimisation step (micro-batches on OOM keep this effective size)
+  eval_batch_size: 128          # images per batch for validation / test prediction
+  patience: 15                  # early stopping: stop after this many epochs without val improvement
+                                # (scaled with epochs: with 100 epochs and patience 5 training would stop while
+                                #  the cosine LR is still ~95% of its peak, so the long schedule would be unused)
+  # the model kept is the epoch with the best val metric: Top-1 (identity) / balanced accuracy (gender)
+
+  optimizer:
+    name: adamw                 # adamw | sgd (= sgdm: SGD with momentum). Re-run the LR sweep when switching!
+    weight_decay: 0.05
+    betas: [0.9, 0.999]         # adamw only
+    eps: 1.0e-8                 # adamw only
+    momentum: 0.9               # sgd only
+    nesterov: false             # sgd only
+    no_decay_bias_norm: true    # no weight decay on biases and normalisation layers (standard practice)
+
+  scheduler:
+    name: cosine                # cosine | step | constant  (updated every iteration)
+    warmup_epochs: 2            # linear warm-up from ~0 to the learning rate
+    min_lr_ratio: 0.0           # cosine ends at learning_rate * min_lr_ratio
+    step_epochs: [60, 80]       # step only: multiply the LR by step_gamma at these epochs
+    step_gamma: 0.1
+
+  learning_rate:
+    # How the learning rate of a model is decided, in this order:
+    #   1. by_family[<family>]  if given here  -> fixed value (use this to publish / reproduce exact results)
+    #   2. outputs/results/chosen_lr.json      -> result of the sweep (scripts/06_lr_sweep.py)
+    #   3. default
+    by_family: {}               # e.g. {ResNet: 3.0e-4, "ViT / DeiT": 1.0e-4, ...}  (family names as in models.yaml)
+    default: 1.0e-4
+    sweep_grid: [3.0e-4, 1.0e-4, 3.0e-5]
+    sweep_epochs: 10
+
+  label_smoothing: 0.0
+  grad_clip: 1.0                # max gradient norm (0 = off)
+  gender_balanced_loss: true    # weight the gender loss by inverse class frequency (~300 M vs ~200 F subjects)
+  amp: true                     # mixed precision on CUDA (bf16 if the GPU supports it, else fp16 + loss scaling)
+  amp_dtype: auto               # auto | bf16 | fp16
+  deterministic: false          # true = cuDNN deterministic algorithms (slower, bit-identical reruns)
+  seeds: [0, 1, 2]              # E1 and E2-S1 are repeated with each seed; E2-S2 / S3 / E0 / sweep use the first
+  save_checkpoint: false        # E1/E2 checkpoints are not needed later; S3 checkpoints are always saved
+
+  # ---- speed without changing the result, identical for every model (README section 8.1) ----
+  # channels_last only changes how conv feature maps are laid out in memory (faster on Tensor Cores);
+  # the computation is the same. Used for the pure-CNN families only (no gain for Transformers).
+  channels_last_families: [VGG, ResNet, DenseNet, RegNet, MobileNet, EfficientNet, ConvNeXt]
+  # torch.compile and TF32 matmuls are deliberately NOT used: compile helps some architectures much more
+  # than others, can fail for some timm models, and depends on the PyTorch/Triton version.
+  memory_plan:
+    use: true                   # start each run with the micro-batch split measured by script 05 on this GPU
+    budget_fraction: 0.85       # a split "fits" if its peak memory < 85% of the GPU memory free at probe time
+                                # (headroom for fragmentation over a long run)
+    probe_steps: 3              # training steps used to measure peak memory
+    timed_steps: 5              # extra steps to measure training throughput (images/s)
+
+fewshot:
+  identity_shots: [1, 2, 5]
+  identity_val: 5
+  gender_shots: [1, 2, 5, 10]
+  episodes_prototype: 100
+  episodes_linear: 20            # logistic regression is slower
+  linear_C_grid: [0.01, 0.1, 1.0, 10.0]   # logistic regression (L2) inverse regularisation, chosen on val
+  linear_max_iter: 1000          # lbfgs iterations
+  gender_val_max_images: 2000    # E4 LP: at most this many val-fold images to choose C
+  gender_linear_shots: [5, 10]   # LP for gender only makes sense with a few samples per class
+  single_gallery_runs: 100       # E3b
+
+unsupervised:
+  kmeans_restarts: 3             # independent runs with seeds seed+0, seed+1, ... (mean ± std reported)
+  kmeans_max_iter: 300
+  minibatch_above: 200000       # K-means on more images than this uses MiniBatchKMeans (EarVN2.0 stays below: full K-means)
+  minibatch_size: 4096
+  minibatch_n_init: 3
+
+retrieval:
+  gallery_shots: [1, 5]           # E7
+  runs: 10
+  max_impostor_pairs: 1000000     # verification: sampled impostor pairs
+  far: 0.01
+
+resolution_bins: [0, 32, 64, 128, 100000]   # short side of the ORIGINAL image, px
+
+feature_batch_size: 128
